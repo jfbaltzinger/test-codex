@@ -26,13 +26,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
           <Bars3Icon className="h-6 w-6" />
         </button>
         <div>
-          <p className="text-sm font-semibold text-slate-900">Bonjour {user?.firstName ?? 'membre'} !</p>
-          <p className="text-xs text-slate-500">Prêt à transpirer aujourd'hui ? 💪</p>
+          <p className="text-sm font-semibold text-slate-900">Tableau de bord administrateur</p>
+          <p className="text-xs text-slate-500">Pilotage de StudioFit et suivi des performances.</p>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="hidden text-right md:block">
-          <p className="text-sm font-medium text-slate-900">{user?.firstName} {user?.lastName}</p>
+          <p className="text-sm font-medium text-slate-900">
+            {user?.firstName} {user?.lastName}
+          </p>
           <p className="text-xs text-slate-500">{user?.email}</p>
         </div>
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-600">

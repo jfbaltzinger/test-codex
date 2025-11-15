@@ -35,7 +35,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = ({ open, onClose }) =
         >
           <Dialog.Panel className="relative flex w-64 max-w-xs flex-1 flex-col bg-white pb-6 shadow-xl">
             <div className="flex items-center justify-between px-4 py-5">
-              <div className="text-lg font-semibold text-primary-600">StudioFit</div>
+              <div className="text-lg font-semibold text-primary-600">StudioFit Admin</div>
               <button
                 type="button"
                 className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
