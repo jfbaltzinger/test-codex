@@ -5,14 +5,14 @@ export const adminUserSchemas = {
     id: z.string().uuid(),
     email: z.string().email(),
     password: z.string().min(8),
-    role: z.enum(['user', 'admin']),
+    role: z.enum(['member', 'admin']),
     credits: z.number().int().nonnegative().optional()
   }),
   update: z.object({
     id: z.string().uuid(),
     email: z.string().email().optional(),
     password: z.string().min(8).optional(),
-    role: z.enum(['user', 'admin']).optional(),
+    role: z.enum(['member', 'admin']).optional(),
     credits: z.number().int().nonnegative().optional()
   }),
   remove: z.object({

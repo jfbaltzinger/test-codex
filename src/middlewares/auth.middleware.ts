@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { tokenService } from '../utils/token.service';
 import { HttpError } from '../utils/http-error';
+import { UserRole } from '../utils/stores';
 
 export const requireAuth = (req: Request, _res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -17,14 +18,18 @@ export const requireAuth = (req: Request, _res: Response, next: NextFunction) =>
   }
 };
 
-export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
-  requireAuth(req, res, (err?: unknown) => {
-    if (err) {
-      return next(err);
-    }
-    if (req.user?.role !== 'admin') {
-      return next(new HttpError(403, 'Admin access required'));
-    }
-    next();
-  });
+export const authorize = (...roles: UserRole[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    requireAuth(req, res, (err?: unknown) => {
+      if (err) {
+        return next(err);
+      }
+      if (!req.user || !roles.includes(req.user.role)) {
+        return next(new HttpError(403, 'Insufficient permissions'));
+      }
+      next();
+    });
+  };
 };
+
+export const requireAdmin = authorize('admin');

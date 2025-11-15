@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
   const logout = useLogout();
 
   const handleLogout = () => {
-    logout();
+    logout.mutate();
   };
 
   return (
@@ -40,8 +40,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-600">
           {user?.firstName?.[0]}
         </div>
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
-          Déconnexion
+        <Button variant="ghost" size="sm" onClick={handleLogout} disabled={logout.isPending}>
+          {logout.isPending ? 'Déconnexion...' : 'Déconnexion'}
         </Button>
       </div>
     </header>
