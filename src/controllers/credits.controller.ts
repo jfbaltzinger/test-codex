@@ -12,7 +12,7 @@ export class CreditsController {
 
   purchasePack = asyncHandler(async (req: Request, res: Response) => {
     const result = await this.service.purchasePack(req.user!.id, req.body.packId);
-    res.status(201).json(result);
+    res.json(result);
   });
 
   listTransactions = asyncHandler(async (req: Request, res: Response) => {

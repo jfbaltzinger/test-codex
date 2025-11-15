@@ -29,7 +29,7 @@ export class AdminUsersService {
     return safeUser;
   }
 
-  async updateUser(id: string, payload: AdminUserUpdateInput) {
+  async updateUser(id: string, payload: Omit<AdminUserUpdateInput, 'id'>) {
     const data = adminUserSchemas.update.parse({ ...payload, id });
     const user = usersStore.findById(id);
     if (!user) {

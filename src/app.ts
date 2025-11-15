@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
@@ -22,9 +22,9 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 app.use(compression());
 app.use(
   express.json({
-    verify: (req, _res, buf) => {
+    verify: (req: Request, _res, buf) => {
       if (req.originalUrl.startsWith('/api/payments/webhook')) {
-        (req as any).rawBody = Buffer.from(buf);
+        (req as Request & { rawBody?: Buffer }).rawBody = Buffer.from(buf);
       }
     }
   })
