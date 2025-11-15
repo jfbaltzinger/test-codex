@@ -7,7 +7,7 @@
     "test": "npm run test:unit && npm run test:api",
     "test:unit": "jest --config jest.config.ts --selectProjects unit",
     "test:api": "jest --config jest.config.ts --selectProjects api",
-    "test:playwright": "playwright test",
+    "test:playwright": "node scripts/run-playwright.js",
     "test:all": "npm run test && npm run test:playwright",
     "postinstall": "npm --prefix frontend install"
   },
