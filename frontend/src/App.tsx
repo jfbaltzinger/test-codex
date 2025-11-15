@@ -6,7 +6,7 @@ import { ResetPasswordPage } from '@/pages/auth/ResetPasswordPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { ToastProvider } from '@/components/feedback/ToastProvider';
 import { useProfile } from '@/hooks/useAuth';
 import { refreshSession } from '@/api/auth';
