@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation, Navigate, type Location } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate, Link, type Location } from 'react-router-dom';
 import { useLogin } from '@/hooks/useAuth';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -62,6 +62,11 @@ export const LoginPage = () => {
           <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
             {loginMutation.isPending ? 'Connexion...' : 'Se connecter'}
           </Button>
+          <div className="text-center text-sm">
+            <Link to="/forgot-password" className="font-medium text-primary-600 hover:text-primary-700">
+              Mot de passe oublié ?
+            </Link>
+          </div>
         </form>
       </Card>
     </div>

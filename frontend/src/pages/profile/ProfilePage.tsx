@@ -31,7 +31,7 @@ export const ProfilePage = () => {
     mutationFn: updateProfile,
     onSuccess: (updated) => {
       if (token) {
-        setCredentials({ token, user: updated });
+        setCredentials({ user: updated, token });
       } else {
         updateUser(updated);
       }

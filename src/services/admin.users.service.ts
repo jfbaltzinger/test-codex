@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 export class AdminUsersService {
   async listUsers() {
-    return usersStore.list().map(({ passwordHash, ...rest }) => rest);
+    return usersStore.list().map(({ passwordHash, passwordResetExpiresAt, passwordResetTokenHash, tokenVersion, ...rest }) => rest);
   }
 
   async createUser(payload: AdminUserCreateInput) {
@@ -20,9 +20,12 @@ export class AdminUsersService {
       email: data.email,
       passwordHash,
       role: data.role,
-      credits: data.credits ?? 0
+      credits: data.credits ?? 0,
+      tokenVersion: 0,
+      passwordResetTokenHash: null,
+      passwordResetExpiresAt: null
     });
-    const { passwordHash: _, ...safeUser } = user;
+    const { passwordHash: _, passwordResetExpiresAt, passwordResetTokenHash, tokenVersion, ...safeUser } = user;
     return safeUser;
   }
 
@@ -39,7 +42,7 @@ export class AdminUsersService {
       credits: data.credits ?? user.credits,
       passwordHash: passwordHash ?? user.passwordHash
     });
-    const { passwordHash: _, ...safeUser } = updated;
+    const { passwordHash: _, passwordResetExpiresAt, passwordResetTokenHash, tokenVersion, ...safeUser } = updated;
     return safeUser;
   }
 

@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { HttpError } from './http-error';
-import { UserRecord } from './stores';
+import { UserRecord, UserRole } from './stores';
 
 const ACCESS_TOKEN_TTL = '15m';
 const REFRESH_TOKEN_TTL = '7d';
+
+export const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 class TokenService {
   generateAuthTokens(user: UserRecord) {
@@ -12,7 +14,11 @@ class TokenService {
     }
     const payload = { userId: user.id, role: user.role };
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: ACCESS_TOKEN_TTL });
-    const refreshToken = jwt.sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: REFRESH_TOKEN_TTL });
+    const refreshToken = jwt.sign(
+      { userId: user.id, tokenVersion: user.tokenVersion },
+      process.env.REFRESH_TOKEN_SECRET!,
+      { expiresIn: REFRESH_TOKEN_TTL }
+    );
     return { accessToken, refreshToken };
   }
 
@@ -21,7 +27,7 @@ class TokenService {
       if (!process.env.ACCESS_TOKEN_SECRET) {
         throw new Error('ACCESS_TOKEN_SECRET missing');
       }
-      return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as { userId: string; role: 'user' | 'admin' };
+      return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as { userId: string; role: UserRole };
     } catch (error) {
       throw new HttpError(401, 'Invalid token');
     }
@@ -32,7 +38,7 @@ class TokenService {
       if (!process.env.REFRESH_TOKEN_SECRET) {
         throw new Error('REFRESH_TOKEN_SECRET missing');
       }
-      return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as { userId: string };
+      return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as { userId: string; tokenVersion: number };
     } catch (error) {
       throw new HttpError(401, 'Invalid token');
     }

@@ -2,12 +2,19 @@ import { AdminPackInput } from '../models/admin.pack.model';
 import { AdminSessionInput } from '../models/admin.session.model';
 import { Reservation } from '../models/reservation.model';
 
+export type UserRole = 'member' | 'admin';
+
 export type UserRecord = {
   id: string;
   email: string;
   passwordHash: string;
-  role: 'user' | 'admin';
+  role: UserRole;
   credits: number;
+  tokenVersion: number;
+  firstName?: string | null;
+  lastName?: string | null;
+  passwordResetTokenHash?: string | null;
+  passwordResetExpiresAt?: number | null;
 };
 
 type TransactionRecord = {
@@ -83,6 +90,14 @@ export const usersStore = {
   ...users,
   findByEmail(email: string) {
     return users.data.find(user => user.email === email);
+  },
+  findByResetToken(hash: string) {
+    const now = Date.now();
+    return users.data.find(user =>
+      user.passwordResetTokenHash === hash &&
+      !!user.passwordResetExpiresAt &&
+      user.passwordResetExpiresAt > now
+    );
   },
   create(user: UserRecord) {
     if (!user.id) {
