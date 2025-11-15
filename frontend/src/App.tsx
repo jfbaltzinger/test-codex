@@ -1,18 +1,18 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from '@/components/navigation/ProtectedRoute';
 import { LoginPage } from '@/pages/auth/LoginPage';
-import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { CalendarPage } from '@/pages/calendar/CalendarPage';
-import { BookingPage } from '@/pages/booking/BookingPage';
-import { CreditsPage } from '@/pages/credits/CreditsPage';
-import { HistoryPage } from '@/pages/history/HistoryPage';
-import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import jwtDecode from 'jwt-decode';
 import { ToastProvider } from '@/components/feedback/ToastProvider';
 import { useProfile } from '@/hooks/useAuth';
+import { AdminRoute } from '@/components/navigation/AdminRoute';
+import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
+import { MembersPage } from '@/pages/admin/MembersPage';
+import { CreditPacksPage } from '@/pages/admin/CreditPacksPage';
+import { CoursesPage } from '@/pages/admin/CoursesPage';
+import { ReportsPage } from '@/pages/admin/ReportsPage';
 
 interface TokenPayload {
   exp: number;
@@ -53,13 +53,14 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="calendar" element={<CalendarPage />} />
-            <Route path="booking" element={<BookingPage />} />
-            <Route path="credits" element={<CreditsPage />} />
-            <Route path="history" element={<HistoryPage />} />
-            <Route path="profile" element={<ProfilePage />} />
+          <Route element={<AdminRoute />}>
+            <Route element={<AppLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="members" element={<MembersPage />} />
+              <Route path="credit-packs" element={<CreditPacksPage />} />
+              <Route path="courses" element={<CoursesPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

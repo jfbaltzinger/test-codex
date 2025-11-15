@@ -1,21 +1,19 @@
 import { NavLink } from 'react-router-dom';
 import {
-  CalendarDaysIcon,
-  CreditCardIcon,
   HomeIcon,
-  UserCircleIcon,
-  ClockIcon,
-  ArrowTrendingUpIcon,
+  UsersIcon,
+  CreditCardIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 
 const navigation = [
   { name: 'Tableau de bord', to: '/', icon: HomeIcon },
-  { name: 'Calendrier', to: '/calendar', icon: CalendarDaysIcon },
-  { name: 'Réserver', to: '/booking', icon: ClockIcon },
-  { name: 'Acheter des crédits', to: '/credits', icon: CreditCardIcon },
-  { name: 'Historique', to: '/history', icon: ArrowTrendingUpIcon },
-  { name: 'Profil', to: '/profile', icon: UserCircleIcon },
+  { name: 'Adhérents', to: '/members', icon: UsersIcon },
+  { name: 'Packs de crédits', to: '/credit-packs', icon: CreditCardIcon },
+  { name: 'Cours & sessions', to: '/courses', icon: CalendarDaysIcon },
+  { name: 'Reporting', to: '/reports', icon: ChartBarIcon },
 ];
 
 interface SidebarProps {
@@ -30,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobile = false, onNavigate }) 
       mobile ? 'flex flex-col' : 'hidden md:flex md:flex-col'
     )}
   >
-    {!mobile && <div className="mb-8 text-xl font-semibold text-primary-600">StudioFit</div>}
+    {!mobile && <div className="mb-8 text-xl font-semibold text-primary-600">StudioFit Admin</div>}
     <nav className="flex flex-1 flex-col space-y-1 text-sm">
       {navigation.map((item) => (
         <NavLink
