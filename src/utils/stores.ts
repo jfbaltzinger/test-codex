@@ -19,6 +19,17 @@ type TransactionRecord = {
   createdAt: string;
 };
 
+type PaymentRecord = {
+  id: string;
+  userId: string;
+  packId: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'completed';
+  createdAt: string;
+  updatedAt: string;
+};
+
 type Store<T extends { id: string }> = {
   data: T[];
   findById(id: string): T | undefined;
@@ -66,6 +77,7 @@ const packs = createStore<AdminPackInput>([]);
 const sessions = createStore<AdminSessionInput>([]);
 const reservations = createStore<Reservation>([]);
 const transactions = createStore<TransactionRecord>([]);
+const payments = createStore<PaymentRecord>([]);
 
 export const usersStore = {
   ...users,
@@ -93,5 +105,12 @@ export const transactionsStore = {
   ...transactions,
   findByUserId(userId: string) {
     return transactions.data.filter(txn => txn.userId === userId);
+  }
+};
+
+export const paymentsStore = {
+  ...payments,
+  findByUserId(userId: string) {
+    return payments.data.filter(payment => payment.userId === userId);
   }
 };

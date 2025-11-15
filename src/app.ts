@@ -13,13 +13,22 @@ import adminPacksRouter from './routes/admin.packs.routes';
 import adminSessionsRouter from './routes/admin.sessions.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { notFoundHandler } from './middlewares/not-found.middleware';
+import paymentsRouter from './routes/payments.routes';
 
 const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 app.use(compression());
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, _res, buf) => {
+      if (req.originalUrl.startsWith('/api/payments/webhook')) {
+        (req as any).rawBody = Buffer.from(buf);
+      }
+    }
+  })
+);
 app.use(cookieParser());
 
 const apiLimiter = rateLimit({
@@ -37,6 +46,7 @@ app.use('/api/reservations', reservationsRouter);
 app.use('/api/admin/users', adminUsersRouter);
 app.use('/api/admin/packs', adminPacksRouter);
 app.use('/api/admin/sessions', adminSessionsRouter);
+app.use('/api/payments', paymentsRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

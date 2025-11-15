@@ -2,10 +2,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CreditHistoryItem,
   CreditPack,
-  createStripeCheckout,
   getCreditHistory,
   getCreditPacks,
 } from '@/api/credits';
+import {
+  CreateCheckoutSessionPayload,
+  CreateCheckoutSessionResponse,
+  createCheckoutSession,
+} from '@/api/payments';
 import { useToast } from '@/hooks/useToast';
 
 export const useCreditPacks = () =>
@@ -23,11 +27,8 @@ export const useCreditHistory = () =>
 export const useStripeCheckout = () => {
   const toast = useToast();
 
-  return useMutation({
-    mutationFn: (packId: string) => createStripeCheckout(packId),
-    onSuccess: (checkoutUrl) => {
-      window.location.href = checkoutUrl;
-    },
+  return useMutation<CreateCheckoutSessionResponse, unknown, CreateCheckoutSessionPayload>({
+    mutationFn: (payload) => createCheckoutSession(payload),
     onError: () => {
       toast.error("Le paiement n'a pas pu être initié. Réessayez.");
     },
