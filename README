@@ -1,1 +1,55 @@
+# Outil de réservation de cours de Pilates
 
+Ce dépôt contient une API minimaliste en .NET 8 pour gérer des réservations en ligne de cours de Pilates. Elle expose des endpoints pour consulter les séances disponibles et enregistrer des réservations.
+
+## Structure du projet
+
+- `PilatesBooking.sln` : solution Visual Studio.
+- `src/PilatesBooking.Api` : projet Web minimal API.
+  - `Models` : entités métiers (séances, réservations et requêtes).
+  - `Services` : logique métier en mémoire (catalogue de cours et gestion des réservations).
+  - `Dtos` : objets retournés par l'API.
+  - `Program.cs` : définition des endpoints.
+
+## Fonctionnalités
+
+- Consultation des cours de Pilates disponibles avec le nombre de places restantes.
+- Réservation d'une place sur un cours (validation des doublons et de la capacité).
+- Consultation des réservations existantes pour une adresse e-mail donnée.
+- Documentation automatique via Swagger/OpenAPI en environnement de développement.
+
+## Endpoints principaux
+
+- `GET /api/classes` : liste des prochaines séances.
+- `POST /api/reservations` : crée une réservation (body JSON correspondant à `ReservationRequest`).
+- `GET /api/reservations/{email}` : liste les réservations pour l'e-mail indiqué.
+
+## Exécution locale
+
+1. Installer le SDK [.NET 8](https://dotnet.microsoft.com/download).
+2. Restaurer les dépendances :
+   ```bash
+   dotnet restore
+   ```
+3. Lancer l'API :
+   ```bash
+   dotnet run --project src/PilatesBooking.Api
+   ```
+4. L'API est disponible sur `https://localhost:5001` (ou `http://localhost:5000`). La documentation Swagger est accessible sur `/swagger`.
+
+## Tests manuels rapides
+
+Pour simuler une réservation :
+
+```bash
+curl -X POST https://localhost:5001/api/reservations \
+  -H "Content-Type: application/json" \
+  -d '{
+        "classId": "<ID_D_UNE_SEANCE>",
+        "firstName": "Camille",
+        "lastName": "Lefevre",
+        "email": "camille@example.com"
+      }'
+```
+
+Remplacez `<ID_D_UNE_SEANCE>` par l'identifiant retourné par `GET /api/classes`.
