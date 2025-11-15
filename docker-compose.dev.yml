@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: studiofit-db
+    environment:
+      POSTGRES_DB: studiofit
+      POSTGRES_USER: studiofit
+      POSTGRES_PASSWORD: studiofit
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studiofit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: development
+    container_name: studiofit-api
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      HOST: 0.0.0.0
+      DATABASE_URL: postgres://studiofit:studiofit@db:5432/studiofit
+      ACCESS_TOKEN_SECRET: changeme-access
+      REFRESH_TOKEN_SECRET: changeme-refresh
+      CLIENT_ORIGIN: http://localhost:5173
+    volumes:
+      - .:/app
+      - api_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: studiofit-frontend
+    environment:
+      NODE_ENV: development
+      VITE_API_BASE_URL: http://api:3000/api
+      VITE_APP_ENV: development
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  db_data:
+  api_node_modules:
+  frontend_node_modules:

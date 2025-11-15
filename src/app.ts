@@ -48,6 +48,10 @@ app.use('/api/admin/packs', adminPacksRouter);
 app.use('/api/admin/sessions', adminSessionsRouter);
 app.use('/api/payments', paymentsRouter);
 
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 

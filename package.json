@@ -9,6 +9,8 @@
     "test:api": "jest --config jest.config.ts --selectProjects api",
     "test:playwright": "node scripts/run-playwright.js",
     "test:all": "npm run test && npm run test:playwright",
+    "start": "node dist/server.js",
+    "start:dev": "ts-node --transpile-only --watch src/server.ts",
     "postinstall": "npm --prefix frontend install"
   },
   "dependencies": {
