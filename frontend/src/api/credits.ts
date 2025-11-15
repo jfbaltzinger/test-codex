@@ -22,14 +22,6 @@ export const getCreditPacks = async (): Promise<CreditPack[]> => {
   return data;
 };
 
-export const createStripeCheckout = async (packId: string) => {
-  const { data } = await api.post<{ checkoutUrl: string }>(
-    '/payments/stripe/checkout',
-    { packId }
-  );
-  return data.checkoutUrl;
-};
-
 export const getCreditHistory = async (): Promise<CreditHistoryItem[]> => {
   const { data } = await api.get<CreditHistoryItem[]>('/credits/history');
   return data;
