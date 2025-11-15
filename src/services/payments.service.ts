@@ -3,7 +3,7 @@ import { paymentSchemas } from '../models/payment.model';
 import { packsStore, paymentsStore, transactionsStore, usersStore } from '../utils/stores';
 import { HttpError } from '../utils/http-error';
 
-const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2023-10-16';
+const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2023-08-16';
 
 export class PaymentsService {
   private stripe: Stripe | null = null;
