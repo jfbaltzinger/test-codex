@@ -11,6 +11,8 @@ L’application vise à offrir :
 
 Stack technologique imposée : **TypeScript, Node.js, Express, PostgreSQL, React, Tailwind, JWT, Stripe**.
 
+👉 Pour le déploiement et l’exécution en local (Docker ou installation manuelle), consultez le [guide dédié](docs/local-setup.md).
+
 ## 2. Architecture logicielle
 
 ### 2.1. Vue d’ensemble
