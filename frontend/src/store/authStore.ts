@@ -15,6 +15,8 @@ export interface AuthUser {
   firstName?: string | null;
   lastName?: string | null;
   avatarUrl?: string;
+  phone?: string | null;
+  emergencyContact?: string | null;
   role: UserRole;
   credits: number;
 }

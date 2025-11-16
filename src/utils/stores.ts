@@ -14,6 +14,7 @@ export type UserRecord = {
   firstName?: string | null;
   lastName?: string | null;
   phone?: string | null;
+  emergencyContact?: string | null;
   membershipType?: string | null;
   status?: 'active' | 'inactive';
   joinedAt?: string | null;

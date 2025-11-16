@@ -1,7 +1,15 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { v4 as uuid } from 'uuid';
-import { authSchemas, LoginInput, RegisterInput, RequestPasswordResetInput, ResetPasswordInput } from '../models/auth.model';
+import {
+  authSchemas,
+  LoginInput,
+  RegisterInput,
+  RequestPasswordResetInput,
+  ResetPasswordInput,
+  UpdatePasswordInput,
+  UpdateProfileInput
+} from '../models/auth.model';
 import { tokenService } from '../utils/token.service';
 import { UserRecord, usersStore } from '../utils/stores';
 import { HttpError } from '../utils/http-error';
@@ -81,6 +89,44 @@ export class AuthService {
       throw new HttpError(404, 'User not found');
     }
     return sanitizeUser(user);
+  }
+
+  async updateProfile(userId: string, payload: UpdateProfileInput) {
+    const data = authSchemas.updateProfile.parse(payload);
+    const user = usersStore.findById(userId);
+
+    if (!user) {
+      throw new HttpError(404, 'User not found');
+    }
+
+    const updated = usersStore.update(user.id, {
+      firstName: data.firstName ?? user.firstName,
+      lastName: data.lastName ?? user.lastName,
+      phone: data.phone ?? user.phone,
+      emergencyContact: data.emergencyContact ?? user.emergencyContact
+    });
+
+    return sanitizeUser(updated);
+  }
+
+  async updatePassword(userId: string, payload: UpdatePasswordInput) {
+    const data = authSchemas.updatePassword.parse(payload);
+    const user = usersStore.findById(userId);
+
+    if (!user) {
+      throw new HttpError(404, 'User not found');
+    }
+
+    const isCurrentValid = await bcrypt.compare(data.currentPassword, user.passwordHash);
+    if (!isCurrentValid) {
+      throw new HttpError(401, 'Current password is incorrect');
+    }
+
+    const passwordHash = await bcrypt.hash(data.newPassword, 10);
+    usersStore.update(user.id, {
+      passwordHash,
+      tokenVersion: user.tokenVersion + 1
+    });
   }
 
   async logout(userId: string) {
