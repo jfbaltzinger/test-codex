@@ -13,6 +13,10 @@ export type UserRecord = {
   tokenVersion: number;
   firstName?: string | null;
   lastName?: string | null;
+  phone?: string | null;
+  membershipType?: string | null;
+  status?: 'active' | 'inactive';
+  joinedAt?: string | null;
   passwordResetTokenHash?: string | null;
   passwordResetExpiresAt?: number | null;
 };
