@@ -11,6 +11,7 @@ import reservationsRouter from './routes/reservations.routes';
 import adminUsersRouter from './routes/admin.users.routes';
 import adminPacksRouter from './routes/admin.packs.routes';
 import adminSessionsRouter from './routes/admin.sessions.routes';
+import adminAnalyticsRouter from './routes/admin.analytics.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { notFoundHandler } from './middlewares/not-found.middleware';
 import paymentsRouter from './routes/payments.routes';
@@ -46,6 +47,7 @@ app.use('/api/reservations', reservationsRouter);
 app.use('/api/admin/users', adminUsersRouter);
 app.use('/api/admin/packs', adminPacksRouter);
 app.use('/api/admin/sessions', adminSessionsRouter);
+app.use('/api/admin', adminAnalyticsRouter);
 app.use('/api/payments', paymentsRouter);
 
 app.get('/health', (_req, res) => {

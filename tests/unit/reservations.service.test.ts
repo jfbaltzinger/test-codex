@@ -11,7 +11,8 @@ describe('ReservationsService', () => {
       title: 'Yoga Matinal',
       startsAt: new Date().toISOString(),
       durationMinutes: 60,
-      instructor: 'Clara'
+      instructor: 'Clara',
+      capacity: 12
     });
 
     const reservation = await service.createReservation('user-1', 'session-1');
