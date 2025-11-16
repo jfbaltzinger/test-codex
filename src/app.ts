@@ -1,6 +1,6 @@
 import express, { Request } from 'express';
 import helmet from 'helmet';
-import cors from 'cors';
+import cors, { type CorsOptions } from 'cors';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
@@ -22,8 +22,26 @@ const app = express();
 
 void seedDemoData();
 
+const allowedOrigins = (process.env.CLIENT_ORIGIN ?? 'http://localhost:5173')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
+const corsOptions: CorsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+app.use(
+  cors(corsOptions)
+);
 app.use(compression());
 app.use(
   express.json({
