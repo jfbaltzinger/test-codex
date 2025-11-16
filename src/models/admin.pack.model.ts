@@ -5,13 +5,17 @@ export const adminPackSchemas = {
     id: z.string().uuid(),
     name: z.string().min(1),
     credits: z.number().int().positive(),
-    price: z.number().positive()
+    price: z.number().positive(),
+    description: z.string().optional(),
+    isActive: z.boolean().default(true).optional()
   }),
   update: z.object({
     id: z.string().uuid(),
     name: z.string().min(1).optional(),
     credits: z.number().int().positive().optional(),
-    price: z.number().positive().optional()
+    price: z.number().positive().optional(),
+    description: z.string().optional(),
+    isActive: z.boolean().optional()
   }),
   remove: z.object({
     id: z.string().uuid()

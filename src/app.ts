@@ -9,14 +9,18 @@ import creditsRouter from './routes/credits.routes';
 import sessionsRouter from './routes/sessions.routes';
 import reservationsRouter from './routes/reservations.routes';
 import adminUsersRouter from './routes/admin.users.routes';
+import adminMembersRouter from './routes/admin.members.routes';
 import adminPacksRouter from './routes/admin.packs.routes';
 import adminSessionsRouter from './routes/admin.sessions.routes';
 import adminAnalyticsRouter from './routes/admin.analytics.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { notFoundHandler } from './middlewares/not-found.middleware';
 import paymentsRouter from './routes/payments.routes';
+import { seedDemoData } from './utils/demo-data';
 
 const app = express();
+
+void seedDemoData();
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
@@ -45,7 +49,9 @@ app.use('/api/credits', creditsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/reservations', reservationsRouter);
 app.use('/api/admin/users', adminUsersRouter);
+app.use('/api/admin/members', adminMembersRouter);
 app.use('/api/admin/packs', adminPacksRouter);
+app.use('/api/admin/credit-packs', adminPacksRouter);
 app.use('/api/admin/sessions', adminSessionsRouter);
 app.use('/api/admin', adminAnalyticsRouter);
 app.use('/api/payments', paymentsRouter);

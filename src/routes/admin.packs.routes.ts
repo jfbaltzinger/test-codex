@@ -9,6 +9,7 @@ const controller = new AdminPacksController();
 
 router.get('/', requireAdmin, controller.listPacks);
 router.post('/', requireAdmin, validateRequest(adminPackSchemas.create), controller.createPack);
+router.put('/:id', requireAdmin, validateRequest(adminPackSchemas.update), controller.updatePack);
 router.patch('/:id', requireAdmin, validateRequest(adminPackSchemas.update), controller.updatePack);
 router.delete('/:id', requireAdmin, validateRequest(adminPackSchemas.remove), controller.deletePack);
 
