@@ -26,6 +26,7 @@ export const useLogin = () => {
 export const useProfile = () => {
   const setUser = useAuthStore((state) => state.setUser);
   const markHydrated = useAuthStore((state) => state.markHydrated);
+  const clearCredentials = useAuthStore((state) => state.clearCredentials);
   const token = useAuthStore((state) => state.token);
 
   return useQuery({
@@ -38,7 +39,8 @@ export const useProfile = () => {
       markHydrated();
     },
     onError: () => {
-      markHydrated();
+      clearCredentials();
+      localStorage.removeItem('token');
     },
   });
 };
