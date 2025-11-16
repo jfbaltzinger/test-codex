@@ -1,4 +1,5 @@
-import { adminPackSchemas, AdminPackInput } from '../models/admin.pack.model';
+import { v4 as uuid } from 'uuid';
+import { adminPackSchemas, AdminPack, AdminPackCreateInput } from '../models/admin.pack.model';
 import { packsStore } from '../utils/stores';
 import { HttpError } from '../utils/http-error';
 
@@ -7,13 +8,13 @@ export class AdminPacksService {
     return packsStore.list();
   }
 
-  async createPack(payload: AdminPackInput) {
+  async createPack(payload: AdminPackCreateInput) {
     const data = adminPackSchemas.create.parse(payload);
-    const pack = packsStore.create(data);
-    return pack;
+    const pack: AdminPack = { id: uuid(), ...data };
+    return packsStore.create(pack);
   }
 
-  async updatePack(id: string, payload: Partial<AdminPackInput>) {
+  async updatePack(id: string, payload: Partial<AdminPackCreateInput>) {
     const data = adminPackSchemas.update.parse({ ...payload, id });
     const pack = packsStore.findById(id);
     if (!pack) {
