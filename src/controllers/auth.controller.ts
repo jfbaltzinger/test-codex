@@ -38,6 +38,16 @@ export class AuthController {
     res.status(200).json(profile);
   });
 
+  updateProfile = asyncHandler(async (req: Request, res: Response) => {
+    const profile = await this.service.updateProfile(req.user!.id, req.body);
+    res.status(200).json(profile);
+  });
+
+  updatePassword = asyncHandler(async (req: Request, res: Response) => {
+    await this.service.updatePassword(req.user!.id, req.body);
+    res.status(204).send();
+  });
+
   logout = asyncHandler(async (req: Request, res: Response) => {
     await this.service.logout(req.user!.id);
     res.clearCookie('refreshToken', {

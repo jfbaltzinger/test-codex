@@ -7,7 +7,7 @@ export type UpdateProfilePayload = Partial<Pick<AuthUser, 'firstName' | 'lastNam
 };
 
 export const updateProfile = async (payload: UpdateProfilePayload): Promise<AuthUser> => {
-  const { data } = await api.put<AuthUser>('/profile', payload);
+  const { data } = await api.put<AuthUser>('/auth/profile', payload);
   return data;
 };
 
@@ -17,5 +17,5 @@ export interface UpdatePasswordPayload {
 }
 
 export const updatePassword = async (payload: UpdatePasswordPayload): Promise<void> => {
-  await api.post('/profile/password', payload);
+  await api.post('/auth/profile/password', payload);
 };
