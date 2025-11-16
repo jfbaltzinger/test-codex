@@ -1,4 +1,10 @@
-import { paymentsStore, reservationsStore, sessionsStore, usersStore } from '../utils/stores';
+import {
+  paymentsStore,
+  reservationsStore,
+  sessionsStore,
+  transactionsStore,
+  usersStore
+} from '../utils/stores';
 
 type DashboardMetrics = {
   totalBookings: number;
@@ -19,7 +25,7 @@ type OccupancySnapshot = {
 
 export class AdminAnalyticsService {
   getDashboardMetrics(): DashboardMetrics {
-    const bookings = reservationsStore.list();
+    const bookings = reservationsStore.list().filter(reservation => reservation.status !== 'cancelled');
     const sessions = sessionsStore.list();
     const members = usersStore.list().filter(user => user.role === 'member');
 
@@ -28,10 +34,10 @@ export class AdminAnalyticsService {
       .filter(payment => payment.status === 'completed')
       .reduce((total, payment) => total + payment.amount, 0);
 
-    const creditsSold = paymentsStore
+    const creditsSold = transactionsStore
       .list()
-      .filter(payment => payment.status === 'completed')
-      .reduce((total, payment) => total + (payment.amount > 0 ? payment.amount : 0), 0);
+      .filter(transaction => transaction.type === 'purchase')
+      .reduce((total, transaction) => total + transaction.credits, 0);
 
     const occupancyStats = this.computeOccupancy();
 
@@ -51,7 +57,7 @@ export class AdminAnalyticsService {
 
   private computeOccupancy(): { averageOccupancy: number; snapshots: OccupancySnapshot[] } {
     const sessions = sessionsStore.list();
-    const reservations = reservationsStore.list();
+    const reservations = reservationsStore.list().filter(reservation => reservation.status !== 'cancelled');
 
     const snapshotsWithRate = sessions.map(
       (session): (OccupancySnapshot & { occupancy: number }) => {
@@ -66,8 +72,9 @@ export class AdminAnalyticsService {
           bookedSpots: booked,
           capacity,
           occupancy
-      };
-    });
+        };
+      }
+    );
 
     if (snapshotsWithRate.length === 0) {
       return { averageOccupancy: 0, snapshots: [] };
