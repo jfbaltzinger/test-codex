@@ -1,4 +1,4 @@
-import { AdminPackInput } from '../models/admin.pack.model';
+import { AdminPack } from '../models/admin.pack.model';
 import { AdminSessionInput } from '../models/admin.session.model';
 import { Reservation } from '../models/reservation.model';
 
@@ -84,7 +84,7 @@ const createStore = <T extends { id: string }>(seed: T[] = []): Store<T> => {
 };
 
 const users = createStore<UserRecord>([]);
-const packs = createStore<AdminPackInput>([]);
+const packs = createStore<AdminPack>([]);
 const sessions = createStore<AdminSessionInput>([]);
 const reservations = createStore<Reservation>([]);
 const transactions = createStore<TransactionRecord>([]);
