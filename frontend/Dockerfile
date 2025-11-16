@@ -13,7 +13,10 @@ COPY . .
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
 
 FROM deps AS build
+ARG VITE_API_URL
 ENV NODE_ENV=production
+ENV VITE_API_URL=${VITE_API_URL}
+RUN test -n "$VITE_API_URL"
 COPY . .
 RUN npm run build
 

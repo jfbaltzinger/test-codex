@@ -49,6 +49,7 @@ jobs:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       API_IMAGE: ${{ secrets.ECR_REPOSITORY_API }}
       FRONTEND_IMAGE: ${{ secrets.ECR_REPOSITORY_FRONTEND }}
+      FRONTEND_API_URL: ${{ secrets.FRONTEND_API_URL }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -84,6 +85,8 @@ jobs:
           target: runner
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          build-args: |
+            VITE_API_URL=${{ env.FRONTEND_API_URL }}
 
   deploy:
     name: Deploy to ECS
@@ -102,6 +105,8 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       ACCESS_TOKEN_SECRET_ARN: ${{ secrets.ACCESS_TOKEN_SECRET_ARN }}
       REFRESH_TOKEN_SECRET_ARN: ${{ secrets.REFRESH_TOKEN_SECRET_ARN }}
+      EXECUTION_ROLE_ARN: ${{ secrets.ECS_EXECUTION_ROLE_ARN }}
+      TASK_ROLE_ARN: ${{ secrets.ECS_TASK_ROLE_ARN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -122,12 +127,16 @@ jobs:
           ACCESS_TOKEN_SECRET_ARN: ${{ env.ACCESS_TOKEN_SECRET_ARN }}
           REFRESH_TOKEN_SECRET_ARN: ${{ env.REFRESH_TOKEN_SECRET_ARN }}
           AWS_REGION: ${{ env.AWS_REGION }}
+          EXECUTION_ROLE_ARN: ${{ env.EXECUTION_ROLE_ARN }}
+          TASK_ROLE_ARN: ${{ env.TASK_ROLE_ARN }}
 
       - name: Render frontend task definition template
         run: |
           envsubst < infra/ecs-task-definition.frontend.json > infra/ecs-task-definition.frontend.rendered.json
         env:
           AWS_REGION: ${{ env.AWS_REGION }}
+          EXECUTION_ROLE_ARN: ${{ env.EXECUTION_ROLE_ARN }}
+          TASK_ROLE_ARN: ${{ env.TASK_ROLE_ARN }}
 
       - name: Render API task definition
         id: render-api
