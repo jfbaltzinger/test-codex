@@ -1,2 +1,26 @@
-declare module 'cors';
-declare module 'compression';
+declare module 'cors' {
+  import { type RequestHandler } from 'express';
+
+  export interface CorsOptions {
+    origin?:
+      | boolean
+      | string
+      | RegExp
+      | Array<string | RegExp>
+      | ((origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => void);
+    methods?: string | string[];
+    allowedHeaders?: string | string[];
+    exposedHeaders?: string | string[];
+    credentials?: boolean;
+    maxAge?: number;
+    preflightContinue?: boolean;
+    optionsSuccessStatus?: number;
+  }
+
+  export default function cors(options?: CorsOptions): RequestHandler;
+}
+
+declare module 'compression' {
+  import { type RequestHandler } from 'express';
+  export default function compression(): RequestHandler;
+}
