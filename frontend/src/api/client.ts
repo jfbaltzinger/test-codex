@@ -2,7 +2,14 @@ import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } fro
 import { useAuthStore } from '@/store/authStore';
 import type { AuthUser } from '@/store/authStore';
 
-const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
+const configuredBaseURL = import.meta.env.VITE_API_URL ?? import.meta.env.VITE_API_BASE_URL;
+
+const fallbackBaseURL =
+  typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:3000/api`
+    : 'http://localhost:3000/api';
+
+const baseURL = configuredBaseURL ?? fallbackBaseURL;
 
 type RefreshingRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;
