@@ -2,7 +2,10 @@ import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } fro
 import { useAuthStore } from '@/store/authStore';
 import type { AuthUser } from '@/store/authStore';
 
-const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
+const baseURL =
+  import.meta.env.VITE_API_URL ??
+  import.meta.env.VITE_API_BASE_URL ??
+  'http://localhost:3000/api';
 
 type RefreshingRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;
