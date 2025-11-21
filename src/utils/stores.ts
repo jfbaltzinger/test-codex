@@ -13,9 +13,10 @@ export type UserRecord = {
 type TransactionRecord = {
   id: string;
   userId: string;
-  packId: string;
   credits: number;
-  type: 'purchase';
+  type: 'purchase' | 'consumption';
+  packId?: string;
+  sessionId?: string;
   createdAt: string;
 };
 
